@@ -41,7 +41,10 @@ def append_event_to_hdfs(event, file_name):
         with client.write(file_path, encoding='utf-8', overwrite=True) as writer:
             json.dump(existing_data, writer, ensure_ascii=False, indent=2)
 
+<<<<<<< HEAD
+=======
         logger.info(f"Appended event to {file_name}")
+>>>>>>> 2872f63 (init reop)
     except Exception as e:
         logger.error(f"Failed to write to {file_name}: {e}")
 
@@ -87,7 +90,11 @@ def consume_events():
                     logger.info("No messages received for a while. Exiting.")
                     break
                 continue
+<<<<<<< HEAD
+            counter = 0
+=======
 
+>>>>>>> 2872f63 (init reop)
             for tp, messages in msg_pack.items():
                 for message in messages:
                     event = message.value
@@ -96,8 +103,16 @@ def consume_events():
 
                     if topic == TOPICS[0]:
                         append_event_to_hdfs(event, sms_file_name)
+<<<<<<< HEAD
+                        counter += 1
                     elif topic == TOPICS[1]:
                         append_event_to_hdfs(event, call_file_name)
+                        counter += 1
+                    logger.info(f"couber {counter}")
+=======
+                    elif topic == TOPICS[1]:
+                        append_event_to_hdfs(event, call_file_name)
+>>>>>>> 2872f63 (init reop)
     except KeyboardInterrupt:
         logger.warning("Consumer stopped manually.")
     

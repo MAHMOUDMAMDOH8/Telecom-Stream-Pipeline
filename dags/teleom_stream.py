@@ -4,12 +4,20 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 import socket
+<<<<<<< HEAD
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
+=======
+>>>>>>> 2872f63 (init reop)
 
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime(2025, 1, 1),
+<<<<<<< HEAD
+    'retries': 3,
+=======
     'retries': 1,
+>>>>>>> 2872f63 (init reop)
     'retry_delay': timedelta(minutes=1),
 }
 
@@ -49,6 +57,17 @@ with DAG(
         bash_command='python3 /opt/airflow/scripts/python/upload_to_snowflake.py && rm -r /opt/airflow/includes/sms_cleaned && rm -r /opt/airflow/includes/call_cleaned',  # lowercase path
     )
 
+<<<<<<< HEAD
+    trigger_dbt_dag = TriggerDagRunOperator(
+        task_id='trigger_dbt_dag',
+        trigger_dag_id='dbt_pipeline',  
+    )
+
+
+    # Define task dependencies
+    produce_task >> consume_task >> cleaning_job_task >> upload_to_snowflake_task >> trigger_dbt_dag
+=======
 
     # Define task dependencies
     produce_task >> consume_task >> cleaning_job_task >> upload_to_snowflake_task
+>>>>>>> 2872f63 (init reop)

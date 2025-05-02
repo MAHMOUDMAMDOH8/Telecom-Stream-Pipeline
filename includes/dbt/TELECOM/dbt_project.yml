@@ -1,8 +1,15 @@
+<<<<<<< HEAD
+name: 'TELECOM'
+version: '1.0.0'
+
+profile: 'TELECOM' 
+=======
 
 name: 'TELECOM'
 version: '1.0.0'
 
 profile: 'TELECOM'
+>>>>>>> 2872f63 (init reop)
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]
@@ -11,6 +18,20 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
+<<<<<<< HEAD
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  TELECOM:
+    gold:
+      +schema: gold  
+      +docs:
+        node_color: "red"
+      +tags: "gold"
+
+=======
 clean-targets:        
   - "target"
   - "dbt_packages"
@@ -21,4 +42,5 @@ models:
     gold:
       schema: silver  
       +materialized: view
+>>>>>>> 2872f63 (init reop)
 

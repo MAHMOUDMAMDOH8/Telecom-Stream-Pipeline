@@ -114,7 +114,11 @@ if __name__ == "__main__":
                     logging.warning("SMS DataFrame is empty. Skipping insert.")
 
                 if not call_df.empty:
+<<<<<<< HEAD
+                    insert_raw_data("CALL_DATA", call_df, connection, engine)
+=======
                     insert_raw_data("Call", call_df, connection, engine)
+>>>>>>> 2872f63 (init reop)
                 else:
                     logging.warning("Call DataFrame is empty. Skipping insert.")
 
