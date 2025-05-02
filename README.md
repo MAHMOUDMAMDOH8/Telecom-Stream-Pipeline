@@ -175,7 +175,7 @@ see more : [DBT Models](https://github.com/MAHMOUDMAMDOH8/Telecom-Stream-Pipelin
 erDiagram
 
     Dim_user {
-        int USER_ID
+        int USER_ID PK
         string FIRST_NAME
         string LAST_NAME
         string PHONE_NUMBER
@@ -183,22 +183,25 @@ erDiagram
         string EMAIL
         string SEX
     }
+
     Dim_cell_site {
-        string SITE_ID
+        string SITE_ID PK
         string CELL_ID
         string CITY
         float LATITUDE
         float LONGITUDE
         string SITE_NAME
     }
+
     Dim_device_tac {
-        string TAC_ID
+        string TAC_ID PK
         string MANUFACTURER
         string TAC_CODE
     }
+
     Dim_date {
+        int DATE_KEY PK
         string FULL_DATE
-        int DATE_KEY
         int DAY
         int MONTH
         int YEAR
@@ -212,15 +215,16 @@ erDiagram
         string HOUR_AM_PM
         string QUARTER_NAME
     }
+
     Fact_events {
-        string EVENT_ID
-        int SENDER_ID
-        int RECEIVER_ID
-        string SENDER_SITE_ID
-        string RECEIVER_SITE_ID
-        string SENDER_DEVICE_ID
-        string RECEIVER_DEVICE_ID
-        int DATE_KEY
+        string EVENT_ID PK
+        int SENDER_ID FK
+        int RECEIVER_ID FK
+        string SENDER_SITE_ID FK
+        string RECEIVER_SITE_ID FK
+        string SENDER_DEVICE_ID FK
+        string RECEIVER_DEVICE_ID FK
+        int DATE_KEY FK
         string PLAN_SENDER
         string RECEIVER_PLAN
         int CALL_DURATION_SECONDS
@@ -230,13 +234,14 @@ erDiagram
         float AMOUNT
         string CURRENCY
     }
-    Fact_events ||--o{ Dim_user : sender_id → user_id
-    Fact_events ||--o{ Dim_user : receiver_id → user_id
-    Fact_events ||--o{ Dim_cell_site : sender_site_id → site_id
-    Fact_events ||--o{ Dim_cell_site : receiver_site_id → site_id
-    Fact_events ||--o{ Dim_device_tac : sender_device_id → tac_id
-    Fact_events ||--o{ Dim_device_tac : receiver_device_id → tac_id
-    Fact_events ||--o{ Dim_date : date_key → date_key
+
+    Fact_events }|--|| Dim_user : "sender_id → USER_ID"
+    Fact_events }|--|| Dim_user : "receiver_id → USER_ID"
+    Fact_events }|--|| Dim_cell_site : "sender_site_id → SITE_ID"
+    Fact_events }|--|| Dim_cell_site : "receiver_site_id → SITE_ID"
+    Fact_events }|--|| Dim_device_tac : "sender_device_id → TAC_ID"
+    Fact_events }|--|| Dim_device_tac : "receiver_device_id → TAC_ID"
+    Fact_events }|--|| Dim_date : "DATE_KEY → DATE_KEY"
 ```
 
 
