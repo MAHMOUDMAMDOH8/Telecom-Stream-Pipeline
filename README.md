@@ -23,7 +23,7 @@
 This project is designed to process  Telecom data in real-time, enabling analytics
 
 ## System Architecture
-![System Architecture](![Screenshot from 2025-05-02 23-29-36](https://github.com/user-attachments/assets/84c5b8ba-d1d6-479c-928b-58a640ff58c4)
+(![Screenshot from 2025-05-02 23-29-36](https://github.com/user-attachments/assets/84c5b8ba-d1d6-479c-928b-58a640ff58c4)
 )
 
 
