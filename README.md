@@ -74,7 +74,7 @@ Airflow orchestrates the ETL; dbt builds models in Snowflake from the silver lay
 The project follows the Medallion Architecture, which organizes data into three layers:
 
 
-![Data Flow Through the Medallion Architecture](![Screenshot from 2025-05-02 23-41-31](https://github.com/user-attachments/assets/7dc06f97-46d4-4a6b-a68f-d92b6666707c)
+[Data Flow Through the Medallion Architecture](![Screenshot from 2025-05-02 23-41-31](https://github.com/user-attachments/assets/7dc06f97-46d4-4a6b-a68f-d92b6666707c)
 
 
 
@@ -86,11 +86,11 @@ The project follows the Medallion Architecture, which organizes data into three 
 
 ## Ingestion Architecture
 
-![Ingestion Architecture](![Screenshot from 2025-05-02 23-32-03](https://github.com/user-attachments/assets/0e92ae4c-0b6b-4460-a404-f63ea0c85370)
-)
+[Ingestion Architecture](![Screenshot from 2025-05-02 23-32-03](https://github.com/user-attachments/assets/0e92ae4c-0b6b-4460-a404-f63ea0c85370)
+
 
 ## Data Processing Layer
-![Screenshot from 2025-05-02 23-34-22](https://github.com/user-attachments/assets/6825b0bd-7eb4-4251-99ec-4a784356cbb3)
+[Data Processing Layer](https://github.com/user-attachments/assets/6825b0bd-7eb4-4251-99ec-4a784356cbb3)
 
 
 
@@ -98,7 +98,7 @@ The project follows the Medallion Architecture, which organizes data into three 
 ## Airflow DAG Overview
 ![airflow]
 ### teleom_stream_dag
-![teleom_stream_dag](https://github.com/user-attachments/assets/132d4cf4-6a6d-4c3d-91c6-09cabd745cba)
+[teleom_stream_dag](https://github.com/user-attachments/assets/132d4cf4-6a6d-4c3d-91c6-09cabd745cba)
 
 
 DAG 1 – telecom_stream_pipeline
@@ -114,7 +114,7 @@ DAG 1 – telecom_stream_pipeline
     trigger_dbt_dag: Triggers the second DAG for model building and testing.
 
 ### dbt_pipeline
-![dbt_pipeline](https://github.com/user-attachments/assets/3e8deb69-9e31-44c4-ae5e-ec6bd08e0530)
+[dbt_pipeline](https://github.com/user-attachments/assets/3e8deb69-9e31-44c4-ae5e-ec6bd08e0530)
 DAG 2 – dbt_transform_pipeline
 
     dbt_snapshot_group: Runs dbt snapshot jobs to capture slowly changing dimensions.
@@ -265,7 +265,7 @@ erDiagram
 
 
 ## Data Lineage 
-![dbt_lineage](https://github.com/user-attachments/assets/4a7d91e5-f56e-439f-aa1a-e0891afba14c)
+[dbt_lineage](https://github.com/user-attachments/assets/4a7d91e5-f56e-439f-aa1a-e0891afba14c)
 
 
 
