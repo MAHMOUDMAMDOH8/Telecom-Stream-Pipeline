@@ -1,0 +1,50 @@
+# syntax=docker/dockerfile:1
+FROM python:3.12-bullseye
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    SPARK_VERSION=3.5.5 \
+    SPARK_HOME=/opt/spark \
+    JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 \
+    PATH="/opt/spark/bin:/opt/spark/sbin:$PATH"
+
+# Install core system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        openjdk-11-jdk \
+        curl \
+        unzip \
+        sudo \
+        netcat \
+        procps && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
+# Download and extract Spark
+RUN mkdir -p $SPARK_HOME && \
+    curl -fsSL https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz | \
+    tar -xz --strip-components=1 -C $SPARK_HOME
+
+# Add Kafka and HDFS-compatible jars
+RUN mkdir -p $SPARK_HOME/jars && \
+    curl -fsSL https://repo1.maven.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.3.0/spark-sql-kafka-0-10_2.12-3.3.0.jar -o $SPARK_HOME/jars/spark-sql-kafka-0-10_2.12-3.3.0.jar && \
+    curl -fsSL https://repo1.maven.org/maven2/org/apache/spark/spark-token-provider-kafka-0-10_2.12/3.3.0/spark-token-provider-kafka-0-10_2.12-3.3.0.jar -o $SPARK_HOME/jars/spark-token-provider-kafka-0-10_2.12-3.3.0.jar && \
+    curl -fsSL https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-client-api/3.3.2/hadoop-client-api-3.3.2.jar -o $SPARK_HOME/jars/hadoop-client-api-3.3.2.jar && \
+    curl -fsSL https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-client-runtime/3.3.2/hadoop-client-runtime-3.3.2.jar -o $SPARK_HOME/jars/hadoop-client-runtime-3.3.2.jar
+
+# Add non-Spark Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Spark configuration
+RUN echo "export HADOOP_CONF_DIR=/opt/spark/conf" >> $SPARK_HOME/conf/spark-env.sh
+# Defer hadoop classpath eval to runtime (optional unless Hadoop is installed)
+RUN echo "export SPARK_DIST_CLASSPATH=\$(hadoop classpath)" >> $SPARK_HOME/conf/spark-env.sh
+RUN echo "spark.hadoop.fs.defaultFS=hdfs://namenode:9000" >> $SPARK_HOME/conf/spark-defaults.conf
+
+# Add entrypoint script
+COPY entrypoint.sh $SPARK_HOME/
+RUN chmod +x $SPARK_HOME/entrypoint.sh
+
+WORKDIR $SPARK_HOME
+ENTRYPOINT ["./entrypoint.sh"]

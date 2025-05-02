@@ -1,0 +1,9 @@
+Faker==26.1.0
+python-dotenv==1.0.1
+pymongo==4.8.0
+Jinja2==3.1.4
+# Add dependencies for Alpha Vantage producer
+kafka-python==2.0.2
+requests==2.31.0
+pyspark
+pandas

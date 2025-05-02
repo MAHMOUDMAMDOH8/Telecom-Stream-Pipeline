@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: row_data
+    database: STOCK
+    schema: SILVER
+    tables: 
+      - name: stock_prices
+      - name: companies

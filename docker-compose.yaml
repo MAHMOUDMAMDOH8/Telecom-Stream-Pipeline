@@ -1,0 +1,211 @@
+version: '3.8'
+
+networks:
+  BigData-network:
+    name: BigData-network
+    driver: bridge
+  airflow-network:
+    driver: bridge
+
+services:
+  # HDFS NameNode
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: namenode
+    environment:
+      - CLUSTER_NAME=bigdata-cluster
+    volumes:
+      - hdfs-namenode:/hadoop/dfs/name
+    ports:
+      - "9870:9870"
+      - "8020:8020"
+    networks:
+      - BigData-network
+
+  # HDFS DataNode
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode
+    environment:
+      - CLUSTER_NAME=bigdata-cluster
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+    volumes:
+      - hdfs-datanode:/hadoop/dfs/data
+    networks:
+      - BigData-network
+    depends_on:
+      - namenode
+
+  # Spark
+  spark:
+    build:
+      context: ./spark
+      dockerfile: dockerfile
+    container_name: spark
+    volumes:
+      - ./includes:/opt/spark/includes
+      - ./jinja_templates:/jinja_templates
+      - ./environment.env:/environment.env
+      - ./tests:/tests
+      - ./Source:/opt/spark/source
+      - ./spark/core-site.xml:/opt/spark/conf/core-site.xml
+      - ./hadoop/bin:/opt/spark/hadoop/bin
+      - ./spark-apps:/opt/spark-apps
+      - ./Scripts:/opt/spark/scripts
+    ports:
+      - 7077:7077
+      - 8888:8888
+      - 8080:8080
+      - 10000:10000
+      - 10001:10001
+      - 2222:22
+    networks:
+      - BigData-network
+    depends_on:
+      - namenode
+      - datanode
+
+  # Zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 2181:2181
+    networks:
+      - BigData-network
+
+  # Kafka
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - BigData-network
+
+  # PostgreSQL for Airflow
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - airflow-network
+      - BigData-network
+
+  # Airflow Init
+  airflow-init:
+    build: .
+    container_name: airflow-init
+    env_file:
+      - ./environment.env
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        mkdir -p /opt/airflow/{logs,dags,plugins}
+        chown -R "${AIRFLOW_UID:-50000}:0" /opt/airflow
+        exec /entrypoint airflow db migrate && airflow users create \
+          --username airflow \
+          --password airflow \
+          --firstname Airflow \
+          --lastname Admin \
+          --role Admin \
+          --email admin@example.com
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__CORE__FERNET_KEY: ''
+    user: "0:0"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+      - ./environment.env:/opt/airflow/environment.env
+      - ./Scripts:/opt/airflow/scripts
+      - ./includes:/opt/airflow/includes
+      - ./dbt:/opt/airflow/dbt
+    networks:
+      - airflow-network
+      - BigData-network
+    depends_on:
+      - postgres
+
+  # Airflow Webserver
+  airflow-webserver:
+    build: .
+    container_name: airflow-webserver
+    env_file:
+      - ./environment.env
+    command: standalone
+    ports:
+      - "8082:8080"
+    restart: always
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__WEBSERVER__SECRET_KEY: 1234
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+      - ./environment.env:/opt/airflow/environment.env
+      - ./Scripts:/opt/airflow/scripts
+      - ./includes:/opt/airflow/includes
+      - ./dbt:/opt/airflow/dbt
+    networks:
+      - airflow-network
+      - BigData-network
+
+  # Airflow Scheduler
+  airflow-scheduler:
+    build: .
+    container_name: airflow-scheduler
+    env_file:
+      - ./environment.env
+    command: scheduler
+    restart: always
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+      - ./environment.env:/opt/airflow/environment.env
+      - ./Scripts:/opt/airflow/scripts
+      - ./includes:/opt/airflow/includes
+      - ./dbt:/opt/airflow/dbt
+    networks:
+      - airflow-network
+      - BigData-network
+
+volumes:
+  hdfs-namenode:
+  hdfs-datanode:
+  postgres_data:
