@@ -92,7 +92,7 @@ The project follows the Medallion Architecture, which organizes data into three 
 ## Data Processing Layer
 ![Screenshot from 2025-05-02 23-34-22](https://github.com/user-attachments/assets/6825b0bd-7eb4-4251-99ec-4a784356cbb3)
 
-![Screenshot from 2025-05-02 23-35-09](https://github.com/user-attachments/assets/6e64f356-028f-42ca-bdd8-08aa91cfbd77)
+
 
 
 ## Airflow DAG Overview
