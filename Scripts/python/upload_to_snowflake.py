@@ -78,10 +78,10 @@ if __name__ == "__main__":
     logger = logging.getLogger("snowflake_uploader")
 
     # Snowflake credentials
-    SNOWFLAKE_USER = "snowtest11"
-    SNOWFLAKE_PASSWORD = "Sn1234567891011"
+    SNOWFLAKE_USER = ""
+    SNOWFLAKE_PASSWORD = ""
     SNOWFLAKE_ROLE = "ACCOUNTADMIN"
-    SNOWFLAKE_ACCOUNT = "JN79948.eu-central-2.aws"
+    SNOWFLAKE_ACCOUNT = ""
     SNOWFLAKE_WAREHOUSE = "COMPUTE_WH"
     SNOWFLAKE_DATABASE = "Telecom"
     SNOWFLAKE_SCHEMA = "SILVER"
