@@ -9,6 +9,7 @@
 - [Environment Setup](#Environment-Setup)
 - [Project Structure](#Project-Structure)
 - [Ingestion Architecture](#Ingestion-Architecture)
+- [Data Processing Layer](#Data-Processing-Layer)
 - [Pipeline Architecture](#pipeline-architecture)
 - [DBT Models](#DBT-Models)
 - [Airflow DAG Overview](#airflow-dag-overview)
@@ -22,7 +23,8 @@
 This project is designed to process  Telecom data in real-time, enabling analytics
 
 ## System Architecture
-![System Architecture]()
+![System Architecture](![Screenshot from 2025-05-02 23-29-36](https://github.com/user-attachments/assets/84c5b8ba-d1d6-479c-928b-58a640ff58c4)
+)
 
 
 ## Tech Stack & Tools
@@ -64,11 +66,21 @@ Airflow orchestrates the ETL; dbt builds models in Snowflake from the silver lay
 
 ## Pipeline Architecture
 ![Architecture drawio]()
+### teleom_stream_dag
+![teleom_stream_dag](https://github.com/user-attachments/assets/132d4cf4-6a6d-4c3d-91c6-09cabd745cba)
+### dbt_pipeline
+![dbt_pipeline](https://github.com/user-attachments/assets/3e8deb69-9e31-44c4-ae5e-ec6bd08e0530)
+
+
+
+
 
 The project follows the Medallion Architecture, which organizes data into three layers:
-![Data Flow]()
+![Data Flow](![Screenshot from 2025-05-02 23-27-57](https://github.com/user-attachments/assets/4343d647-3e67-4b35-a45b-00039e1d6efe)
+)
 
-![Data Flow Through the Medallion Architecture]()
+![Data Flow Through the Medallion Architecture](![Screenshot from 2025-05-02 23-30-31](https://github.com/user-attachments/assets/1e572e01-f1ae-4d0f-8282-6a164adefade)
+)
 
 
 
@@ -80,7 +92,14 @@ The project follows the Medallion Architecture, which organizes data into three 
 
 ## Ingestion Architecture
 
-![Ingestion Architecture]()
+![Ingestion Architecture](![Screenshot from 2025-05-02 23-32-03](https://github.com/user-attachments/assets/0e92ae4c-0b6b-4460-a404-f63ea0c85370)
+)
+
+## Data Processing Layer
+![Screenshot from 2025-05-02 23-34-22](https://github.com/user-attachments/assets/6825b0bd-7eb4-4251-99ec-4a784356cbb3)
+
+![Screenshot from 2025-05-02 23-35-09](https://github.com/user-attachments/assets/6e64f356-028f-42ca-bdd8-08aa91cfbd77)
+
 
 ## Airflow DAG Overview
 ![airflow]
@@ -245,8 +264,10 @@ erDiagram
 ```
 
 
+
 ## Data Lineage 
-![dbt_lineage](https://github.com/user-attachments/assets/7babeebf-36ad-45d0-a46f-aae5f6dc9242)
+![dbt_lineage](https://github.com/user-attachments/assets/4a7d91e5-f56e-439f-aa1a-e0891afba14c)
+
 
 
 
