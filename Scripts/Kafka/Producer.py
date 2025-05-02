@@ -3,10 +3,9 @@ import json
 import time
 import logging
 from telcom_data_simulator import main as generate_events
-<<<<<<< HEAD
+
 import random
-=======
->>>>>>> 2872f63 (init reop)
+
 import os
 
 
@@ -40,13 +39,13 @@ def stream_events(num_events):
             logger.error(f"Unknown event type: {event_type}")
             continue
         producer.send(topic, value=event)
-<<<<<<< HEAD
+
         logger.info(f"Sent event: ")
         time.sleep(random.uniform(0.1, 3.0))
-=======
+
         logger.info(f"Sent event: {event}")
         time.sleep(0.5)  
->>>>>>> 2872f63 (init reop)
+
 
     producer.flush()
     logger.info("All events sent successfully.")
@@ -54,11 +53,11 @@ def stream_events(num_events):
 if __name__ == "__main__":
     try:
         logger.info("Starting event streaming...")
-<<<<<<< HEAD
+
         stream_events(200)
-=======
+
         stream_events(5)
->>>>>>> 2872f63 (init reop)
+
         logger.info("Finished streaming events.")
     except Exception as e:
         logger.error(f"Error occurred: {e}")
