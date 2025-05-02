@@ -63,7 +63,7 @@ Airflow orchestrates the ETL; dbt builds models in Snowflake from the silver lay
     └── README.md                
 
 ## Pipeline Architecture
-![Architecture drawio](https://github.com/user-attachments/assets/78c383e9-31f1-4e01-a1de-b78cb4a36fcf)
+![Architecture drawio]()
 
 The project follows the Medallion Architecture, which organizes data into three layers:
 ![Data Flow]()
@@ -80,22 +80,33 @@ The project follows the Medallion Architecture, which organizes data into three 
 
 ## Ingestion Architecture
 
-![Ingestion Architecture](https://github.com/user-attachments/assets/bc13699e-af20-4cbc-8cb7-cf915063931d)
+![Ingestion Architecture]()
 
 ## Airflow DAG Overview
 ![airflow]
 
-Kafka_Producer: Runs a Kafka producer script to send stock market data to the Kafka topic (stock-prices).
-Kafka_Consumer: Runs a Kafka consumer script to consume messages from the Kafka topic and save them to the local warehouse.
-Upload_to_HDFS: Uploads the locally saved data to the bronze layer in HDFS.
-Spark_Cleaning_Job: Executes a Spark job to clean and transform the data from the bronze layer to the silver layer.
-Upload_to_Snowflake: Removes old data and uploads the cleaned data from the silver layer to Snowflake.
-build_Models: Runs dbt to build analytical models using the data in Snowflake.
-quality_Models_test: Runs dbt tests to validate the quality of the built models.
+DAG 1 – telecom_stream_pipeline
 
-Kafka_Producer >> Kafka_Consumer >> Upload_to_HDFS >> Spark_Cleaning_Job >> Upload_to_Snowflake >> build_Models >> quality_Models_test
+    produce_task: Sends simulated telecom events to the Kafka topic.
 
-see DAG : [airflow DAG]
+    consume_task: Consumes Kafka messages and writes them to the local warehouse.
+
+    cleaning_job_task: Processes raw data from HDFS bronze layer using Spark and writes to the silver layer.
+
+    upload_to_snowflake_task: Uploads cleaned data from HDFS silver layer to Snowflake.
+
+    trigger_dbt_dag: Triggers the second DAG for model building and testing.
+
+DAG 2 – dbt_transform_pipeline
+
+    dbt_snapshot_group: Runs dbt snapshot jobs to capture slowly changing dimensions.
+
+    dbt_dimension_group: Builds cleaned and enriched dimension models.
+
+    dbt_fact_group: Creates analytical fact tables based on the dimension data.
+
+see DAG : [airflow DAG](https://github.com/MAHMOUDMAMDOH8/Telecom-Stream-Pipeline/tree/main/dags)
+
 
 ## DBT Models
 #### dim_date
@@ -219,13 +230,13 @@ erDiagram
         float AMOUNT
         string CURRENCY
     }
-    Fact_events ||--|| Dim_user : sender_id = user_id
-    Fact_events ||--|| Dim_user : receiver_id = user_id
-    Fact_events ||--|| Dim_cell_site : sender_site_id = site_id
-    Fact_events ||--|| Dim_cell_site : receiver_site_id = site_id
-    Fact_events ||--|| Dim_device_tac : sender_device_id = tac_id
-    Fact_events ||--|| Dim_device_tac : receiver_device_id = tac_id
-    Fact_events ||--|| Dim_date : date_key = date_key
+    Fact_events ||--o{ Dim_user : sender_id → user_id
+    Fact_events ||--o{ Dim_user : receiver_id → user_id
+    Fact_events ||--o{ Dim_cell_site : sender_site_id → site_id
+    Fact_events ||--o{ Dim_cell_site : receiver_site_id → site_id
+    Fact_events ||--o{ Dim_device_tac : sender_device_id → tac_id
+    Fact_events ||--o{ Dim_device_tac : receiver_device_id → tac_id
+    Fact_events ||--o{ Dim_date : date_key → date_key
 ```
 
 
