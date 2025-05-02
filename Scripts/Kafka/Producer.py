@@ -3,9 +3,7 @@ import json
 import time
 import logging
 from telcom_data_simulator import main as generate_events
-
 import random
-
 import os
 
 
@@ -28,7 +26,7 @@ def stream_events(num_events):
     """
     logger.info(f"Streaming {num_events} events to Kafka topic '{TOPIC}'")
     all_events = generate_events(num_events)
-    
+    counter = 0
     for event in all_events:
         event_type = event.get("event_type")
         if event_type == "sms":
@@ -39,13 +37,9 @@ def stream_events(num_events):
             logger.error(f"Unknown event type: {event_type}")
             continue
         producer.send(topic, value=event)
-
-        logger.info(f"Sent event: ")
+        counter +=1
+        logger.info(f"Sent event:{counter} ")
         time.sleep(random.uniform(0.1, 3.0))
-
-        logger.info(f"Sent event: {event}")
-        time.sleep(0.5)  
-
 
     producer.flush()
     logger.info("All events sent successfully.")
@@ -56,7 +50,6 @@ if __name__ == "__main__":
 
         stream_events(200)
 
-        stream_events(5)
 
         logger.info("Finished streaming events.")
     except Exception as e:

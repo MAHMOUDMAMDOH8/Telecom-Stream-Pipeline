@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: row_data
-<<<<<<< HEAD
+
     database: TELECOM
     schema: SILVER
     tables: 
@@ -11,11 +11,3 @@ sources:
       - name: SMS
       - name: CALL_DATA
       - name: device_tac_lookup
-
-=======
-    database: STOCK
-    schema: SILVER
-    tables: 
-      - name: stock_prices
-      - name: companies
->>>>>>> 2872f63 (init reop)

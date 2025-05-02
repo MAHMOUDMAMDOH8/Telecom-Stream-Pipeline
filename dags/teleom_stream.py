@@ -3,12 +3,16 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
+import socket
+
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
+
 
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime(2025, 1, 1),
+    'retries': 3,
     'retries': 1,
     'retry_delay': timedelta(minutes=1),
 }
@@ -24,12 +28,12 @@ with DAG(
 
     produce_task = BashOperator(
         task_id='kafka_producer',
-        bash_command='python3 /opt/airflow/scripts/Kafka/Producer.py',
+        bash_command='python3 /opt/airflow/scripts/Kafka/Producer.py',  # lowercase path
     )
 
     consume_task = BashOperator(
         task_id='kafka_consumer',
-        bash_command='python3 /opt/airflow/scripts/Kafka/consumer.py',
+        bash_command='python3 /opt/airflow/scripts/Kafka/consumer.py',  # lowercase path
     )
 
     cleaning_job_task = SparkSubmitOperator(
@@ -46,7 +50,7 @@ with DAG(
 
     upload_to_snowflake_task = BashOperator(
         task_id='Upload_to_Snowflake',
-        bash_command='python3 /opt/airflow/scripts/python/upload_to_snowflake.py && rm -r /opt/airflow/includes/sms_cleaned && rm -r /opt/airflow/includes/call_cleaned',
+        bash_command='python3 /opt/airflow/scripts/python/upload_to_snowflake.py && rm -r /opt/airflow/includes/sms_cleaned && rm -r /opt/airflow/includes/call_cleaned',  # lowercase path
     )
 
     trigger_dbt_dag = TriggerDagRunOperator(
@@ -54,4 +58,8 @@ with DAG(
         trigger_dag_id='dbt_pipeline',  
     )
 
+
+    # Define task dependencies
     produce_task >> consume_task >> cleaning_job_task >> upload_to_snowflake_task >> trigger_dbt_dag
+
+

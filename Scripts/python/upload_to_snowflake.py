@@ -116,9 +116,6 @@ if __name__ == "__main__":
                 if not call_df.empty:
 
                     insert_raw_data("CALL_DATA", call_df, connection, engine)
-
-                    insert_raw_data("Call", call_df, connection, engine)
-
                 else:
                     logging.warning("Call DataFrame is empty. Skipping insert.")
 

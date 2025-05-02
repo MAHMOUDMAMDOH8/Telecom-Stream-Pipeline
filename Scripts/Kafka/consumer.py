@@ -42,7 +42,7 @@ def append_event_to_hdfs(event, file_name):
             json.dump(existing_data, writer, ensure_ascii=False, indent=2)
 
 
-        logger.info(f"Appended event to {file_name}")
+        logger.info(f"Appended event to hdfs")
 
     except Exception as e:
         logger.error(f"Failed to write to {file_name}: {e}")
@@ -105,7 +105,7 @@ def consume_events():
                     elif topic == TOPICS[1]:
                         append_event_to_hdfs(event, call_file_name)
                         counter += 1
-                    logger.info(f"couber {counter}")
+                    logger.info(f"counter {counter}")
 
     except KeyboardInterrupt:
         logger.warning("Consumer stopped manually.")

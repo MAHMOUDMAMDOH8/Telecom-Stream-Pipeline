@@ -1,7 +1,7 @@
 name: 'TELECOM'
 version: '1.0.0'
 
-profile: 'TELECOM'
+profile: 'TELECOM'  # Ensure this profile exists in the profiles.yml file
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]
@@ -17,5 +17,7 @@ clean-targets:
 models:
   TELECOM:
     gold:
-      schema: silver  
-      +materialized: view
+      schema: gold  
+      +materialized: incremental  
+      +incremental_strategy: append  
+
