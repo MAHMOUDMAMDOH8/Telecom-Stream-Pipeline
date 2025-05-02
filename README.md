@@ -65,10 +65,7 @@ Airflow orchestrates the ETL; dbt builds models in Snowflake from the silver lay
 
 ## Pipeline Architecture
 ![Architecture drawio]()
-### teleom_stream_dag
-![teleom_stream_dag](https://github.com/user-attachments/assets/132d4cf4-6a6d-4c3d-91c6-09cabd745cba)
-### dbt_pipeline
-![dbt_pipeline](https://github.com/user-attachments/assets/3e8deb69-9e31-44c4-ae5e-ec6bd08e0530)
+
 
 
 
@@ -100,6 +97,9 @@ The project follows the Medallion Architecture, which organizes data into three 
 
 ## Airflow DAG Overview
 ![airflow]
+### teleom_stream_dag
+![teleom_stream_dag](https://github.com/user-attachments/assets/132d4cf4-6a6d-4c3d-91c6-09cabd745cba)
+
 
 DAG 1 – telecom_stream_pipeline
 
@@ -113,6 +113,8 @@ DAG 1 – telecom_stream_pipeline
 
     trigger_dbt_dag: Triggers the second DAG for model building and testing.
 
+### dbt_pipeline
+![dbt_pipeline](https://github.com/user-attachments/assets/3e8deb69-9e31-44c4-ae5e-ec6bd08e0530)
 DAG 2 – dbt_transform_pipeline
 
     dbt_snapshot_group: Runs dbt snapshot jobs to capture slowly changing dimensions.
