@@ -24,7 +24,6 @@ This project is designed to process  Telecom data in real-time, enabling analyti
 
 ## System Architecture
 (![Screenshot from 2025-05-02 23-29-36](https://github.com/user-attachments/assets/84c5b8ba-d1d6-479c-928b-58a640ff58c4)
-)
 
 
 ## Tech Stack & Tools
@@ -76,11 +75,9 @@ Airflow orchestrates the ETL; dbt builds models in Snowflake from the silver lay
 
 
 The project follows the Medallion Architecture, which organizes data into three layers:
-![Data Flow](![Screenshot from 2025-05-02 23-27-57](https://github.com/user-attachments/assets/4343d647-3e67-4b35-a45b-00039e1d6efe)
-)
 
-![Data Flow Through the Medallion Architecture](![Screenshot from 2025-05-02 23-30-31](https://github.com/user-attachments/assets/1e572e01-f1ae-4d0f-8282-6a164adefade)
-)
+
+![Data Flow Through the Medallion Architecture](![Screenshot from 2025-05-02 23-41-31](https://github.com/user-attachments/assets/7dc06f97-46d4-4a6b-a68f-d92b6666707c)
 
 
 
