@@ -1,5 +1,7 @@
 # End-to-End-Streaming-Data-Pipeline
-![Medallion Architecture drawio](https://github.com/user-attachments/assets/667f31ca-7433-4568-82c6-a9e3c5d1e25d)
+
+![Medallion Architecture](https://github.com/user-attachments/assets/6edec695-1c97-40da-a7bf-8e4bbff600bf)
+
 
 ## Table of Contents 
 - [Introduction](#introduction)
@@ -64,11 +66,8 @@ Airflow orchestrates the ETL; dbt builds models in Snowflake from the silver lay
     └── README.md                
 
 ## Pipeline Architecture
-![Architecture drawio](https://github.com/user-attachments/assets/78c383e9-31f1-4e01-a1de-b78cb4a36fcf)
 
-
-
-
+![Architecture](https://github.com/user-attachments/assets/27cacc76-e660-49eb-858c-4a85ee6dfe8e)
 
 
 The project follows the Medallion Architecture, which organizes data into three layers:
