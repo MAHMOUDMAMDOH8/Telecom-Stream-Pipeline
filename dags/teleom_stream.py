@@ -21,7 +21,7 @@ with DAG(
     dag_id='telecom_stream_pipeline',
     default_args=default_args,
     description='A DAG for streaming telecom data from Kafka to Snowflake',
-    schedule='@daily',  
+    schedule='*/5 * * * *',  
     catchup=False,
     tags=['kafka'],
 ) as dag:
