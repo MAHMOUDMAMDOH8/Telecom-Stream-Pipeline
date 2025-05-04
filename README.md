@@ -268,6 +268,20 @@ erDiagram
 
 ## Reporting
 
+### Home 
+![Home](https://github.com/user-attachments/assets/96bad374-788b-4f10-b91c-aabdf57e8bfe)
+
+### overview 
+![overview](https://github.com/user-attachments/assets/867465cf-42d5-403f-b90d-b3a83fc74396)
+
+### users 
+![users](https://github.com/user-attachments/assets/f8848026-2be1-410a-a2f3-aa0e2d503a69)
+
+### cell site
+![cell site](https://github.com/user-attachments/assets/7d652306-5f44-4b20-9dcf-ac0572aa6290)
+
+
+
 # Contact Information
 📧 Email: [mahmoud.mamdoh0812@gmail.com](mailto:mahmoud.mamdoh0812@gmail.com)  
 🔗 LinkedIn: [Mahmoud Mamdoh](https://www.linkedin.com/in/mahmoud-mamdoh-47a68a203/)  
