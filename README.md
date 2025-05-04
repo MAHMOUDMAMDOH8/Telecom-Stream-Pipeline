@@ -1,4 +1,4 @@
-# End-to-End-Streaming-Data-Pipeline
+# Telecom-Stream-Pipeline 
 
 ![Medallion Architecture](https://github.com/user-attachments/assets/6edec695-1c97-40da-a7bf-8e4bbff600bf)
 
