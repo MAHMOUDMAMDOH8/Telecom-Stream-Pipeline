@@ -25,27 +25,7 @@ with DAG(
     tags=['kafka'],
 ) as dag:
 
-    produce_task = BashOperator(
-        task_id='kafka_producer',
-        bash_command='python3 /opt/airflow/scripts/Kafka/Producer.py',  # lowercase path
-    )
 
-    consume_task = BashOperator(
-        task_id='kafka_consumer',
-        bash_command='python3 /opt/airflow/scripts/Kafka/consumer.py',  # lowercase path
-    )
-
-    cleaning_job_task = SparkSubmitOperator(
-        task_id="Spark_Cleaning_Job",
-        application="/opt/airflow/scripts/Spark/cleaning_job.py",
-        conn_id="spark_conn",  
-        verbose=True,
-        executor_memory="2g",
-        driver_memory="2g",
-        num_executors=1,
-        total_executor_cores=1,
-        executor_cores=1,
-    )
 
     upload_to_snowflake_task = BashOperator(
         task_id='Upload_to_Snowflake',
@@ -59,6 +39,6 @@ with DAG(
 
 
     # Define task dependencies
-    produce_task >> consume_task >> cleaning_job_task >> upload_to_snowflake_task >> trigger_dbt_dag
+  upload_to_snowflake_task >> trigger_dbt_dag
 
 
