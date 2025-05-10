@@ -96,17 +96,10 @@ The project follows the Medallion Architecture, which organizes data into three 
 
 ## Airflow DAG Overview
 ![airflow]
-### teleom_stream_dag
-![teleom_stream_dag](https://github.com/user-attachments/assets/132d4cf4-6a6d-4c3d-91c6-09cabd745cba)
+
 
 
 DAG 1 – telecom_stream_pipeline
-
-    produce_task: Sends simulated telecom events to the Kafka topic.
-
-    consume_task: Consumes Kafka messages and writes them to the local warehouse.
-
-    cleaning_job_task: Processes raw data from HDFS bronze layer using Spark and writes to the silver layer.
 
     upload_to_snowflake_task: Uploads cleaned data from HDFS silver layer to Snowflake.
 
