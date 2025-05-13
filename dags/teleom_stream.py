@@ -4,7 +4,6 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 from airflow.providers.apache.spark.operators.spark_submit import SparkSubmitOperator
 import socket
-
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 
 
@@ -17,19 +16,39 @@ default_args = {
 }
 
 with DAG(
-    dag_id='telecom_stream_pipeline',
+    dag_id='telecom_Stream_ingestion_pipeline',
     default_args=default_args,
     description='A DAG for streaming telecom data from Kafka to Snowflake',
-    schedule='*/5 * * * *',  
+    schedule= '*/2 * * * *',  
     catchup=False,
     tags=['kafka'],
 ) as dag:
 
 
 
-    upload_to_snowflake_task = BashOperator(
-        task_id='Upload_to_Snowflake',
-        bash_command='python3 /opt/airflow/scripts/python/upload_to_snowflake.py && rm -r /opt/airflow/includes/sms_cleaned && rm -r /opt/airflow/includes/call_cleaned',  # lowercase path
+
+    cleaning_job_task = SparkSubmitOperator(
+        task_id="Spark_Cleaning_Job",
+        application="/opt/airflow/scripts/Spark/cleaning_job.py",
+        conn_id="spark_conn",  
+        verbose=True,
+        executor_memory="2g",
+        driver_memory="2g",
+        num_executors=1,
+        total_executor_cores=1,
+        executor_cores=1,
+    )
+
+    HDFS_to_Snow = SparkSubmitOperator(
+        task_id="HDFS_to_Snow",
+        application="/opt/airflow/scripts/Spark/upload_to_snowflake.py",
+        conn_id="spark_conn",  
+        verbose=True,
+        executor_memory="2g",
+        driver_memory="2g",
+        num_executors=1,
+        total_executor_cores=1,
+        executor_cores=1,
     )
 
     trigger_dbt_dag = TriggerDagRunOperator(
@@ -38,7 +57,6 @@ with DAG(
     )
 
 
-    # Define task dependencies
-  upload_to_snowflake_task >> trigger_dbt_dag
+    cleaning_job_task >> HDFS_to_Snow >> trigger_dbt_dag
 
 
